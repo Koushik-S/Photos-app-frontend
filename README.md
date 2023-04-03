@@ -1,1 +1,1 @@
-# Photos-app-frontend
+# CCBD-Photo-Album
