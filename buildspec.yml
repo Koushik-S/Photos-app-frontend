@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "Cloning repository..."
+      - echo "Syncing files with S3 bucket..."
+      - aws s3 sync . s3://photo-search-app-hw2
+
+artifacts:
+  files:
+    - '**/*'
