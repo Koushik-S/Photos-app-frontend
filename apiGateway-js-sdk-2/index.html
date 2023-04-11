@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Photo Album</title>
 	<link href="./photo_album.css" rel="stylesheet">
-	<script src="main2.js"></script>
+	<script src="main.js"></script>
 	<script type="text/javascript" src="apiGateway-js-sdk/lib/axios/dist/axios.standalone.js"></script>
 	<script type="text/javascript" src="apiGateway-js-sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
 	<script type="text/javascript" src="apiGateway-js-sdk/lib/CryptoJS/rollups/sha256.js"></script>
@@ -35,11 +35,11 @@
 		<div class="buttons">
 			<button class="button" type="button" onclick="search()">Search</button>
 			<div class="buttons">
-				<form action="/action_page.php">
+				<form action="" id="custom_labels">
 					<input type="file" id="uploaded_file" name="filename" accept="image/*">
-					<input type="text" id="custom_labels" name="custom_labels" placeholder="Custom labels">
+					<input type="text" id="custom_labels-1" name="custom_labels-1" placeholder="Custom labels">
 				</form>
-				<button class="button" type="button" onclick="upload()">Upload</button>
+				<button class="button" type="submit" onclick="upload()">Upload</button>
 	 		</div>
 		</div>
 		<div class="row">

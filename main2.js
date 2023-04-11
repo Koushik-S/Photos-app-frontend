@@ -16,6 +16,9 @@ function search()
 
 function getPhotos(text)
 {
+	var photosDiv = document.getElementById('photos_results');
+	photosDiv.innerHTML = "";
+
 	document.getElementsByClassName('searchbar')[0].value = '';
 
  	var sdk = apigClientFactory.newClient({ apiKey: "mcMOdJHYUg8yvAjRZ9aLH2YPKg7WJUDG4qTDFvEV" });
@@ -58,7 +61,7 @@ function uploadRequest(body, file, custom_labels)
 				"x-api-key": "mcMOdJHYUg8yvAjRZ9aLH2YPKg7WJUDG4qTDFvEV",
 				"X-amz-meta-customLabels":custom_labels
 			},
-			body: body
+			body: JSON.stringify(body)
 		});
 	}
 	else{
@@ -69,7 +72,7 @@ function uploadRequest(body, file, custom_labels)
 				'Content-Type': file.type,
 				"x-api-key": "mcMOdJHYUg8yvAjRZ9aLH2YPKg7WJUDG4qTDFvEV"
 			},
-			body: body
+			body: JSON.stringify(body)
 		});
 	}
 }
@@ -77,35 +80,47 @@ function uploadRequest(body, file, custom_labels)
 function upload()
 {
 	var filePath = (document.getElementById('uploaded_file').value).split("\\");
-    var fileName = filePath[filePath.length - 1];
-    var fileExt = fileName.split(".").pop();
-		custom_labels = ""
+	const uploadedFile = document.getElementById('uploaded_file').files[0];
+	console.log(uploadedFile);
+	custom_labels = ""
+	if (!document.getElementById('custom_labels').value == "") {
+			var custom_labels = document.getElementById('custom_labels').value;
+	}
+	const formData = new FormData();
+	formData.append('file',uploadedFile);
+	formData.append('labels',custom_labels);
 
-    if (!document.getElementById('custom_labels').value == "") {
-        var custom_labels = document.getElementById('custom_labels').value;
-    }
-    console.log(fileName);
-		console.log(custom_labels);
-		console.log(document.getElementById('custom_labels'));
-    // console.log(custom_labels.value);
+	const fileInput = document.getElementById('uploaded_file');
+	const fileName = fileInput.value.split('\\').pop();
+	const fileType = fileName.split('.').pop();
 
-    var file = document.getElementById("uploaded_file").files[0];
-    file.constructor = () => file;
-		console.log(file)
-    console.log(file.type);
+	url = "https://92wrywms2h.execute-api.us-east-1.amazonaws.com/v1/upload/photos-bucket-vwks/" + fileName;
 
-    var sdk = apigClientFactory.newClient({ apiKey: "mcMOdJHYUg8yvAjRZ9aLH2YPKg7WJUDG4qTDFvEV" });
+	if(custom_labels.length >0)
+	{
+		console.log("possible custom label")
+		const response = fetch(url, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': `image/${fileType}`,
+				"x-api-key": "mcMOdJHYUg8yvAjRZ9aLH2YPKg7WJUDG4qTDFvEV",
+				"X-amz-meta-customLabels":custom_labels
+			},
+			body: uploadedFile
+		});
+	}
+	else{
+		console.log("no custom label")
+		const response = fetch(url, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': file.type,
+				"x-api-key": "mcMOdJHYUg8yvAjRZ9aLH2YPKg7WJUDG4qTDFvEV"
+			},
+			body: uploadedFile
+		});
+	}
 
-    var reader = new FileReader();
-    reader.onload = function (event) {
-        body = btoa(event.target.result);
-        console.log('Reader body : ', body);
-        return uploadRequest(body, file, custom_labels)
-    }
-    reader.readAsBinaryString(file);
-
-    document.getElementById('uploaded_file').value = "";
-    document.getElementById('custom_labels').value = "";
 }
 
 window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition
