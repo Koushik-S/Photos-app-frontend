@@ -114,7 +114,7 @@ function upload()
 		const response = fetch(url, {
 			method: 'PUT',
 			headers: {
-				'Content-Type': file.type,
+				'Content-Type': `image/${fileType}`,
 				"x-api-key": "mcMOdJHYUg8yvAjRZ9aLH2YPKg7WJUDG4qTDFvEV"
 			},
 			body: uploadedFile
